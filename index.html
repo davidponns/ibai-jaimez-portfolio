@@ -121,12 +121,19 @@
   #work { background: var(--black); }
   .work-grid {
     display:grid; grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    gap: 40px;
   }
   .work-item {
     position:relative; overflow:hidden; cursor:pointer;
     aspect-ratio: 1/1;
     background: var(--light-gray);
+  }
+  .work-item::after {
+    content:'';
+    position:absolute; inset:0;
+    background: url('https://res.cloudinary.com/dvm2cwral/image/upload/v1779102526/gratis-png-marcos-obra-de-arte-museo-de-arte-marco_zqyxf3.png') center/100% 100% no-repeat;
+    pointer-events:none;
+    z-index:3;
   }
   .work-item img {
     width:100%; height:100%; object-fit:cover;
@@ -137,7 +144,7 @@
     transform: scale(1.05); filter: grayscale(0%);
   }
   .work-overlay {
-    position:absolute; inset:0;
+    position:absolute; inset:0; z-index:2;
     background: linear-gradient(to top, rgba(10,10,10,.85) 0%, transparent 50%);
     opacity:0; transition: opacity .4s;
     display:flex; align-items:flex-end; padding:2rem;
@@ -152,7 +159,7 @@
     color: var(--beige);
   }
   .work-num {
-    position:absolute; top:1.5rem; left:1.5rem;
+    position:absolute; top:1.5rem; left:1.5rem; z-index:4;
     font-size:.65rem; letter-spacing:.2em; color: var(--gray);
   }
 
