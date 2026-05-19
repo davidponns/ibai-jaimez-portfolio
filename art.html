@@ -151,8 +151,13 @@
 
   <!-- Intro video — transparent WebM, plays once -->
   <video id="intro-video" autoplay muted playsinline>
-    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779212373/skate_transparent2_sulgca.webm" type="video/webm"/>
+    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779214244/skate_transparent3_eh2l2o.webm" type="video/webm"/>
   </video>
+
+  <div class="hero-art-content">
+    <p class="page-eyebrow">Obra seleccionada &nbsp;·&nbsp; Art</p>
+    <h1 class="page-title">Obres<br>d'<em>Art</em></h1>
+  </div>
 
   <div class="hero-scroll">Scroll</div>
 </section>
@@ -211,18 +216,54 @@ setInterval(() => { if (Math.random() < 0.5) spawnDust(); }, 100);
   requestAnimationFrame(loop);
 })();
 
-// Fade out video when it ends, show scroll indicator
+// Split title into individual .char spans
+(function splitTitle() {
+  const title = document.querySelector('.page-title');
+  const nodes = [...title.childNodes];
+  title.innerHTML = '';
+  nodes.forEach(node => {
+    if (node.nodeType === 3) {
+      [...node.textContent].forEach(ch => {
+        const s = document.createElement('span');
+        s.className = 'char';
+        s.textContent = ch;
+        title.appendChild(s);
+      });
+    } else if (node.nodeName === 'BR') {
+      title.appendChild(document.createElement('br'));
+    } else if (node.nodeName === 'EM') {
+      [...node.textContent].forEach(ch => {
+        const s = document.createElement('span');
+        s.className = 'char';
+        s.style.cssText = 'font-style:italic;color:var(--beige)';
+        s.textContent = ch;
+        title.appendChild(s);
+      });
+    }
+  });
+})();
+
+// Set initial states
+gsap.set('.page-eyebrow', { opacity:0, y:20 });
+gsap.set('.char',         { opacity:0, y:60, rotateX:-80, transformOrigin:'50% 100%' });
+gsap.set('.hero-scroll',  { opacity:0 });
+
+// Text animates simultaneously with video on page load
+const tl = gsap.timeline({ delay:0.3 });
+
+tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
+  .to('.char', {
+    opacity:1, y:0, rotateX:0,
+    stagger: 0.05,
+    duration: 0.55,
+    ease: 'back.out(1.5)'
+  }, '-=0.25')
+  .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
+
+// Fade out video when it ends
 const video = document.getElementById('intro-video');
-
-gsap.set('.hero-scroll', { opacity:0 });
-
 video.addEventListener('ended', () => {
-  gsap.to('#intro-video', { opacity:0, duration:0.7, ease:'power2.in' });
-  gsap.to('.hero-scroll', { opacity:1, duration:0.4, delay:0.5 });
-});
-
-video.addEventListener('error', () => {
-  gsap.to('.hero-scroll', { opacity:1, duration:0.4 });
+  gsap.to('#intro-video', { opacity:0, duration:0.8, ease:'power2.in' });
 });
 
 /* ════════════════════════════════
