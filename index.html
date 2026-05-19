@@ -56,6 +56,43 @@
   }
   .nav-links a:hover { color: var(--off-white); }
 
+  /* DROPDOWN */
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-trigger { cursor:pointer; display:flex; align-items:center; gap:.4rem; }
+  .nav-dropdown-trigger::after {
+    content:''; width:5px; height:5px;
+    border-right:1px solid var(--beige); border-bottom:1px solid var(--beige);
+    transform:rotate(45deg) translateY(-2px);
+    transition: transform .25s;
+  }
+  .nav-dropdown.open .nav-dropdown-trigger::after {
+    transform:rotate(-135deg) translateY(-2px);
+  }
+  .nav-dropdown-menu {
+    position:absolute; top:calc(100% + 1rem); left:50%;
+    transform:translateX(-50%);
+    background:rgba(30,27,24,0.97);
+    border:1px solid var(--light-gray);
+    padding:.6rem 0;
+    display:flex; flex-direction:column;
+    min-width:130px;
+    opacity:0; pointer-events:none;
+    transform:translateX(-50%) translateY(-6px);
+    transition:opacity .2s, transform .2s;
+  }
+  .nav-dropdown.open .nav-dropdown-menu {
+    opacity:1; pointer-events:auto;
+    transform:translateX(-50%) translateY(0);
+  }
+  .nav-dropdown-menu a {
+    padding:.5rem 1.2rem;
+    font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--beige); text-decoration:none;
+    transition:color .2s, background .2s;
+    white-space:nowrap;
+  }
+  .nav-dropdown-menu a:hover { color:var(--off-white); background:rgba(255,255,255,0.04); }
+
   /* HERO */
   #hero {
     height:100vh; display:flex; flex-direction:column;
@@ -320,7 +357,14 @@
 <nav>
   <a class="nav-logo" href="#">Ibai Jaimez</a>
   <div class="nav-links">
-    <a href="#work">Obres</a>
+    <div class="nav-dropdown">
+      <a class="nav-dropdown-trigger" href="#work">Obres</a>
+      <div class="nav-dropdown-menu">
+        <a href="#work-art">Art</a>
+        <a href="#work-disseny">Disseny</a>
+        <a href="#work-publicitat">Publicitat</a>
+      </div>
+    </div>
     <a href="#about">Sobre</a>
     <a href="#contact">Contacte</a>
   </div>
@@ -339,9 +383,8 @@
 
 <!-- WORK -->
 <section id="work">
-
   <!-- OBRES D'ART -->
-  <div class="work-category">
+  <div class="work-category" id="work-art">
     <h2 class="work-category-title reveal">Obres d'<em>Art</em></h2>
     <div class="work-grid">
       <div class="work-item reveal"><span class="work-num">01</span></div>
@@ -352,8 +395,8 @@
   </div>
 
   <!-- OBRES DE DISSENY -->
-  <div class="work-category">
-    <h2 class="work-category-title reveal">Obres de <em>Disseny</em></h2>
+  <div class="work-category" id="work-disseny">
+    <h2 class="work-category-title reveal">Obres de<em>Disseny</em></h2>
     <div class="work-grid">
       <div class="work-item reveal"><span class="work-num">01</span></div>
       <div class="work-item reveal"><span class="work-num">02</span></div>
@@ -363,7 +406,7 @@
   </div>
 
   <!-- OBRES DE PUBLICITAT -->
-  <div class="work-category">
+  <div class="work-category" id="work-publicitat">
     <h2 class="work-category-title reveal">Obres de <em>Publicitat</em></h2>
     <div class="work-grid">
       <div class="work-item reveal"><span class="work-num">01</span></div>
@@ -414,6 +457,20 @@
     entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Dropdown nav
+  const dropdown = document.querySelector('.nav-dropdown');
+  const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+  trigger.addEventListener('click', e => {
+    e.preventDefault();
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+  });
+  dropdown.querySelectorAll('.nav-dropdown-menu a').forEach(a => {
+    a.addEventListener('click', () => dropdown.classList.remove('open'));
+  });
 </script>
 </body>
 </html>
