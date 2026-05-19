@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ibai Jaimez — Obres de Disseny</title>
+<style>
+  @font-face {
+    font-family: 'Playfair Display';
+    src: local('Georgia'), local('Times New Roman');
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --black: #2a2520;
+    --off-white: #f0ebe3;
+    --beige: #c8b89a;
+    --gray: #aaa;
+    --light-gray: #3a3530;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 1.5rem 3rem;
+  }
+  nav::before {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    pointer-events:none;
+  }
+  .nav-logo {
+    font-family:'Playfair Display', serif;
+    font-size: 1.1rem; letter-spacing:.15em;
+    text-transform:uppercase; color: var(--off-white);
+    text-decoration:none; position:relative; z-index:1;
+  }
+  .nav-links { display:flex; gap:2.5rem; position:relative; z-index:1; }
+  .nav-links a {
+    color: var(--beige); text-decoration:none;
+    font-size:.75rem; letter-spacing:.2em; text-transform:uppercase;
+    transition: color .3s;
+  }
+  .nav-links a:hover { color: var(--off-white); }
+
+  /* DROPDOWN */
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-trigger { cursor:pointer; display:flex; align-items:center; gap:.4rem; }
+  .nav-dropdown-trigger::after {
+    content:''; width:5px; height:5px;
+    border-right:1px solid var(--beige); border-bottom:1px solid var(--beige);
+    transform:rotate(45deg) translateY(-2px);
+    transition: transform .25s;
+  }
+  .nav-dropdown.open .nav-dropdown-trigger::after {
+    transform:rotate(-135deg) translateY(-2px);
+  }
+  .nav-dropdown-menu {
+    position:absolute; top:calc(100% + 1rem); left:50%;
+    background:rgba(30,27,24,0.97);
+    border:1px solid var(--light-gray);
+    padding:.6rem 0;
+    display:flex; flex-direction:column;
+    min-width:130px;
+    opacity:0; pointer-events:none;
+    transform:translateX(-50%) translateY(-6px);
+    transition:opacity .2s, transform .2s;
+  }
+  .nav-dropdown.open .nav-dropdown-menu {
+    opacity:1; pointer-events:auto;
+    transform:translateX(-50%) translateY(0);
+  }
+  .nav-dropdown-menu a {
+    padding:.5rem 1.2rem;
+    font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--beige); text-decoration:none;
+    transition:color .2s, background .2s;
+    white-space:nowrap;
+  }
+  .nav-dropdown-menu a:hover { color:var(--off-white); background:rgba(255,255,255,0.04); }
+
+  /* PAGE HEADER */
+  #page-header {
+    padding: 11rem 3rem 5rem;
+    background: var(--black);
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .page-eyebrow {
+    font-size:.7rem; letter-spacing:.4em; text-transform:uppercase;
+    color: var(--beige); margin-bottom:1.5rem;
+  }
+  .page-title {
+    font-family:'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight:900; line-height:.95;
+    color: var(--off-white);
+  }
+  .page-title em { font-style:italic; color: var(--beige); }
+
+  /* SECTION BASE */
+  section { padding: 7rem 3rem; }
+
+  /* WORK */
+  #work { background: var(--black); }
+  .work-grid {
+    display:grid; grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  .work-item {
+    position:relative; overflow:hidden; cursor:pointer;
+    aspect-ratio: 1/1;
+    background: var(--light-gray);
+  }
+  .work-item::after {
+    content:'';
+    position:absolute; inset:0;
+    pointer-events:none;
+    z-index:3;
+    box-shadow:
+      inset 0 0 0 3px rgba(255,255,255,0.6),
+      inset 0 0 0 18px rgba(200,200,200,0.97),
+      inset 0 0 0 22px rgba(240,240,240,0.85);
+  }
+  .work-item img {
+    width:100%; height:100%; object-fit:cover;
+    transition: transform .8s cubic-bezier(.25,.46,.45,.94), filter .8s;
+    filter: grayscale(20%);
+  }
+  .work-item:hover img {
+    transform: scale(1.05); filter: grayscale(0%);
+  }
+  .work-overlay {
+    position:absolute; inset:0; z-index:2;
+    background: linear-gradient(to top, rgba(10,10,10,.85) 0%, transparent 50%);
+    opacity:0; transition: opacity .4s;
+    display:flex; align-items:flex-end; padding:2rem;
+  }
+  .work-item:hover .work-overlay { opacity:1; }
+  .work-info h3 {
+    font-family:'Playfair Display', serif;
+    font-size:1.4rem; color: var(--off-white);
+  }
+  .work-info span {
+    font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
+    color: var(--beige);
+  }
+  .work-num {
+    position:absolute; top:1.5rem; left:1.5rem; z-index:4;
+    font-size:.65rem; letter-spacing:.2em; color: var(--gray);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top:1px solid var(--light-gray);
+    padding:2rem 3rem;
+    display:flex; justify-content:space-between; align-items:center;
+    color: var(--gray); font-size:.65rem; letter-spacing:.2em;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity:0; transform:translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: .65rem; }
+    #page-header { padding: 8rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .work-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: .6rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">Ibai Jaimez</a>
+  <div class="nav-links">
+    <div class="nav-dropdown">
+      <a class="nav-dropdown-trigger" href="#">Obres</a>
+      <div class="nav-dropdown-menu">
+        <a href="art.html">Art</a>
+        <a href="disseny.html">Disseny</a>
+        <a href="publicitat.html">Publicitat</a>
+      </div>
+    </div>
+    <a href="index.html#about">Sobre</a>
+    <a href="index.html#contact">Contacte</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section id="page-header">
+  <p class="page-eyebrow reveal">Obra seleccionada</p>
+  <h1 class="page-title reveal">Obres de<br><em>Disseny</em></h1>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="work-grid">
+    <div class="work-item reveal"><span class="work-num">01</span></div>
+    <div class="work-item reveal"><span class="work-num">02</span></div>
+    <div class="work-item reveal"><span class="work-num">03</span></div>
+    <div class="work-item reveal"><span class="work-num">04</span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Ibai Jaimez</span>
+  <span>Art · Disseny · Construcció</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const dropdown = document.querySelector('.nav-dropdown');
+  const trigger = dropdown.querySelector('.nav-dropdown-trigger');
+  trigger.addEventListener('click', e => {
+    e.preventDefault();
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+  });
+  dropdown.querySelectorAll('.nav-dropdown-menu a').forEach(a => {
+    a.addEventListener('click', () => dropdown.classList.remove('open'));
+  });
+</script>
+</body>
+</html>
