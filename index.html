@@ -184,13 +184,17 @@
     background: #1e1b18;
     display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center;
   }
-  .about-left h2 {
+  .about-img {
+    width:100%; display:block;
+    object-fit:cover; aspect-ratio:3/4;
+  }
+  .about-right h2 {
     font-family:'Playfair Display', serif;
     font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight:700; line-height:1.1;
     color: var(--off-white); margin-bottom:2rem;
   }
-  .about-left h2 em { font-style:italic; color: var(--beige); }
+  .about-right h2 em { font-style:italic; color: var(--beige); }
   .about-right p {
     font-size:.9rem; line-height:2; color: var(--gray);
     margin-bottom:1.5rem;
@@ -374,10 +378,11 @@
 <!-- ABOUT -->
 <section id="about">
   <div class="about-left reveal">
-    <p class="section-label">Sobre</p>
-    <h2>Art, disseny<br>i <em>construcció</em></h2>
+    <img class="about-img" src="https://res.cloudinary.com/dvm2cwral/image/upload/f_auto,q_auto/v1779202128/ibai-768x512_t3blnv.jpg" alt="Ibai Jaimez"/>
   </div>
   <div class="about-right reveal">
+    <p class="section-label">Sobre</p>
+    <h2>Art, disseny<br>i <em>construcció</em></h2>
     <p>Soc tècnic de taller amb experiència en la <strong>fabricació i instal·lació d'obres d'art contemporani, peces de disseny i projectes de construcció</strong>. El meu treball és fer possible allò que artistes i dissenyadors imaginen.</p>
     <p>Col·laboro amb artistes, galeries, dissenyadors d'interiors i empreses per materialitzar peces de gran format, mobiliari a mida, instal·lacions site-specific i escultures de tota mena de materials.</p>
     <p>Cada projecte és un repte nou. Cada peça, una solució tècnica i poètica alhora.</p>
