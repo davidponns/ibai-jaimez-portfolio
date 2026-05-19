@@ -57,6 +57,7 @@
   }
 
   /* Canvas particles */
+  /* Canvas va por debajo del vídeo para no interferir */
   #particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
 
   /* Intro video (transparent WebM) */
@@ -68,6 +69,8 @@
     object-fit: contain;
     z-index: 2;
     pointer-events: none;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   /* Hero content — hidden until video ends */
