@@ -43,7 +43,7 @@
   }
   /* Concrete grid texture */
   #hero-art::before {
-    content:''; position:absolute; inset:0;
+    content:''; position:absolute; inset:0; z-index:0;
     background:
       radial-gradient(ellipse at 15% 85%, rgba(58,53,48,0.7) 0%, transparent 55%),
       radial-gradient(ellipse at 85% 15%, rgba(42,37,32,0.5) 0%, transparent 45%),
@@ -52,34 +52,27 @@
   }
   /* Floor line */
   #hero-art::after {
-    content:''; position:absolute; bottom:20%; left:0; right:0;
-    height:1px; background:linear-gradient(to right, transparent, rgba(200,184,154,0.15), transparent);
+    content:''; position:absolute; bottom:18%; left:0; right:0; z-index:0;
+    height:1px; background:linear-gradient(to right, transparent, rgba(200,184,154,0.12), transparent);
   }
 
+  /* Canvas particles */
   #particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
 
-  /* Skateboard */
-  .skate-wrap {
+  /* Intro video (transparent WebM) */
+  #intro-video {
     position: absolute;
-    bottom: 18%;
-    left: 0;
-    z-index: 3;
-    width: clamp(200px, 22vw, 300px);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+    pointer-events: none;
   }
-  .skateboard { width:100%; height:auto; filter:drop-shadow(0 12px 30px rgba(0,0,0,0.7)); }
-  .wheel-spin {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: wSpin 0.32s linear infinite paused;
-  }
-  @keyframes wSpin { to { transform:rotate(360deg); } }
 
-  /* Content */
-  .hero-art-content { position:relative; z-index:2; }
-  .page-eyebrow {
-    font-size:.7rem; letter-spacing:.45em; text-transform:uppercase;
-    color:var(--beige); margin-bottom:1.8rem; display:block;
-  }
+  /* Hero content — hidden until video ends */
+  .hero-art-content { position:relative; z-index:3; }
+  .page-eyebrow { font-size:.7rem; letter-spacing:.45em; text-transform:uppercase; color:var(--beige); margin-bottom:1.8rem; display:block; }
   .page-title {
     font-family:'Playfair Display',serif;
     font-size:clamp(3.5rem, 9vw, 9rem);
@@ -92,7 +85,7 @@
 
   /* Scroll hint */
   .hero-scroll {
-    position:absolute; bottom:2.5rem; right:3rem; z-index:2;
+    position:absolute; bottom:2.5rem; right:3rem; z-index:3;
     display:flex; flex-direction:column; align-items:center; gap:.5rem;
     color:var(--gray); font-size:.65rem; letter-spacing:.3em; text-transform:uppercase;
   }
@@ -127,7 +120,6 @@
     .nav-links a { font-size:.65rem; }
     #hero-art { padding:4rem 1.5rem 3rem; }
     .page-title { font-size:clamp(2.8rem,12vw,5rem); }
-    .skate-wrap { width:160px; bottom:16%; }
     section { padding:4rem 1.5rem; }
     .work-grid { grid-template-columns:1fr; }
     footer { padding:1.5rem; flex-direction:column; gap:.6rem; text-align:center; }
@@ -157,51 +149,10 @@
 <section id="hero-art">
   <canvas id="particles"></canvas>
 
-  <!-- SKATEBOARD SVG (side view, popsicle shape) -->
-  <div class="skate-wrap">
-    <svg class="skateboard" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
-      <!-- Deck shadow -->
-      <ellipse cx="150" cy="72" rx="120" ry="4" fill="rgba(0,0,0,0.4)"/>
-      <!-- Deck body - popsicle shape -->
-      <path d="M22 30 C22 24 30 20 44 20 L256 20 C270 20 278 24 278 30 L278 42 C278 48 270 52 256 52 L44 52 C30 52 22 48 22 42 Z" fill="#e8ddd0"/>
-      <!-- Grip tape -->
-      <path d="M22 30 C22 24 30 20 44 20 L256 20 C270 20 278 24 278 30 L278 42 C278 48 270 52 256 52 L44 52 C30 52 22 48 22 42 Z" fill="rgba(20,15,10,0.35)"/>
-      <!-- Deck graphic: circle with cross (art-inspired) -->
-      <circle cx="150" cy="36" r="13" fill="none" stroke="rgba(200,184,154,0.55)" stroke-width="1.2"/>
-      <line x1="134" y1="36" x2="166" y2="36" stroke="rgba(200,184,154,0.4)" stroke-width="1"/>
-      <line x1="150" y1="23" x2="150" y2="49" stroke="rgba(200,184,154,0.4)" stroke-width="1"/>
-      <circle cx="150" cy="36" r="4" fill="rgba(200,184,154,0.3)"/>
-      <!-- Nose + tail detail -->
-      <path d="M22 36 L14 34 L14 38 Z" fill="#c8b89a" opacity="0.6"/>
-      <path d="M278 36 L286 34 L286 38 Z" fill="#c8b89a" opacity="0.6"/>
-      <!-- Trucks (baseplate) -->
-      <rect x="38" y="50" width="44" height="8" rx="3" fill="#7a6a5a"/>
-      <rect x="218" y="50" width="44" height="8" rx="3" fill="#7a6a5a"/>
-      <!-- Axles -->
-      <line x1="60" y1="54" x2="60" y2="54" stroke="#c8b89a" stroke-width="2"/>
-      <line x1="240" y1="54" x2="240" y2="54" stroke="#c8b89a" stroke-width="2"/>
-      <!-- FRONT WHEEL -->
-      <g class="wheel-spin">
-        <circle cx="60" cy="65" r="13" fill="#1c1814" stroke="#7a6a5a" stroke-width="2"/>
-        <circle cx="60" cy="65" r="8" fill="#252018"/>
-        <line x1="60" y1="58" x2="60" y2="72" stroke="#4a4035" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="53" y1="65" x2="67" y2="65" stroke="#4a4035" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="55" y1="60" x2="65" y2="70" stroke="#3a3028" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="65" y1="60" x2="55" y2="70" stroke="#3a3028" stroke-width="1.5" stroke-linecap="round"/>
-      </g>
-      <circle cx="60" cy="65" r="3.5" fill="#c8b89a"/>
-      <!-- BACK WHEEL -->
-      <g class="wheel-spin">
-        <circle cx="240" cy="65" r="13" fill="#1c1814" stroke="#7a6a5a" stroke-width="2"/>
-        <circle cx="240" cy="65" r="8" fill="#252018"/>
-        <line x1="240" y1="58" x2="240" y2="72" stroke="#4a4035" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="233" y1="65" x2="247" y2="65" stroke="#4a4035" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="235" y1="60" x2="245" y2="70" stroke="#3a3028" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="245" y1="60" x2="235" y2="70" stroke="#3a3028" stroke-width="1.5" stroke-linecap="round"/>
-      </g>
-      <circle cx="240" cy="65" r="3.5" fill="#c8b89a"/>
-    </svg>
-  </div>
+  <!-- Intro video — transparent WebM, plays once -->
+  <video id="intro-video" autoplay muted playsinline>
+    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779212373/skate_transparent2_sulgca.webm" type="video/webm"/>
+  </video>
 
   <div class="hero-art-content">
     <p class="page-eyebrow">Obra seleccionada &nbsp;·&nbsp; Art</p>
@@ -230,33 +181,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 /* ════════════════════════════════
-   CANVAS — particles
+   CANVAS — ambient dust particles
 ════════════════════════════════ */
 const canvas = document.getElementById('particles');
 const ctx    = canvas.getContext('2d');
-const burst  = [];
 const dust   = [];
 
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
-
-function spawnBurst(x, y) {
-  const colors = ['#f0ebe3','#c8b89a','#ffffff','#d4c8b0','#aaa'];
-  for (let i = 0; i < 60; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const spd   = Math.random() * 9 + 2;
-    burst.push({
-      x, y,
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd - 4,
-      a:  1,
-      r:  Math.random() * 5 + 1,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      square: Math.random() > 0.6
-    });
-  }
-}
 
 function spawnDust() {
   dust.push({
@@ -264,7 +197,7 @@ function spawnDust() {
     y: canvas.height + 4,
     vx: (Math.random() - 0.5) * 0.5,
     vy: -(Math.random() * 0.35 + 0.1),
-    a:  Math.random() * 0.2 + 0.04,
+    a:  Math.random() * 0.18 + 0.04,
     r:  Math.random() * 1.5 + 0.4
   });
 }
@@ -272,17 +205,6 @@ setInterval(() => { if (Math.random() < 0.5) spawnDust(); }, 100);
 
 (function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  for (let i = burst.length - 1; i >= 0; i--) {
-    const p = burst[i];
-    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.a -= 0.022;
-    if (p.a <= 0) { burst.splice(i, 1); continue; }
-    ctx.save(); ctx.globalAlpha = p.a; ctx.fillStyle = p.color;
-    if (p.square) { ctx.fillRect(p.x - p.r / 2, p.y - p.r / 2, p.r, p.r); }
-    else { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
-    ctx.restore();
-  }
-
   for (let i = dust.length - 1; i >= 0; i--) {
     const p = dust[i];
     p.x += p.vx; p.y += p.vy;
@@ -295,20 +217,20 @@ setInterval(() => { if (Math.random() < 0.5) spawnDust(); }, 100);
 })();
 
 /* ════════════════════════════════
-   GSAP — intro sequence
+   GSAP — title reveal (triggered on video end)
 ════════════════════════════════ */
 
-// Split title into individual .char spans preserving <br> and <em>
+// Split title into individual .char spans
 (function splitTitle() {
   const title = document.querySelector('.page-title');
   const nodes = [...title.childNodes];
   title.innerHTML = '';
   nodes.forEach(node => {
-    if (node.nodeType === 3) { // text node
+    if (node.nodeType === 3) {
       [...node.textContent].forEach(ch => {
         const s = document.createElement('span');
         s.className = 'char';
-        s.textContent = ch === ' ' ? ' ' : ch;
+        s.textContent = ch;
         title.appendChild(s);
       });
     } else if (node.nodeName === 'BR') {
@@ -325,62 +247,39 @@ setInterval(() => { if (Math.random() < 0.5) spawnDust(); }, 100);
   });
 })();
 
-// Hide everything before animation
-gsap.set('.page-eyebrow', { opacity:0, y:18 });
-gsap.set('.char',         { opacity:0, y:55, rotateX:-75, transformOrigin:'50% 100%' });
+// Hide content initially
+gsap.set('.page-eyebrow', { opacity:0, y:20 });
+gsap.set('.char',         { opacity:0, y:60, rotateX:-80, transformOrigin:'50% 100%' });
 gsap.set('.hero-scroll',  { opacity:0 });
-gsap.set('.skate-wrap',   { x: '-110vw' });
 
-const wheels = document.querySelectorAll('.wheel-spin');
-function startWheels() { wheels.forEach(w => w.style.animationPlayState = 'running'); }
-function stopWheels()  { wheels.forEach(w => w.style.animationPlayState = 'paused');  }
+function revealTitle() {
+  const tl = gsap.timeline();
 
-const tl = gsap.timeline({ delay:0.3 });
+  // Fade out video
+  tl.to('#intro-video', { opacity:0, duration:0.7, ease:'power2.in' })
 
-// 1 — Board rolls in
-tl.to('.skate-wrap', {
-    x: '10vw',
-    duration: 1.0,
-    ease: 'power2.out',
-    onStart: startWheels
-  })
+  // Eyebrow
+    .to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' }, '-=0.2')
 
-// 2 — Brief pause, then kickflip (rotateX 360 = flip along length axis)
-  .to('.skate-wrap', {
-    rotateX: 360,
-    transformPerspective: 700,
-    duration: 0.42,
-    ease: 'none',
-    onStart() {
-      stopWheels();
-      const r = document.querySelector('.skate-wrap').getBoundingClientRect();
-      spawnBurst(r.left + r.width / 2, r.top + r.height / 2);
-    },
-    onComplete: startWheels
-  })
+  // Letters flip in one by one
+    .to('.char', {
+      opacity:1, y:0, rotateX:0,
+      stagger: 0.05,
+      duration: 0.55,
+      ease: 'back.out(1.5)'
+    }, '-=0.25')
 
-// 3 — Board exits right
-  .to('.skate-wrap', {
-    x: '115vw',
-    duration: 0.85,
-    ease: 'power2.in',
-    onComplete: stopWheels
-  })
+  // Scroll indicator
+    .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
+}
 
-// 4 — Eyebrow text
-  .to('.page-eyebrow', { opacity:1, y:0, duration:0.5, ease:'power2.out' }, '-=0.55')
+// Trigger on video end
+const video = document.getElementById('intro-video');
+video.addEventListener('ended', revealTitle);
 
-// 5 — Title: each letter flips in
-  .to('.char', {
-    opacity: 1, y: 0, rotateX: 0,
-    stagger: 0.048,
-    duration: 0.55,
-    ease: 'back.out(1.5)'
-  }, '-=0.35')
-
-// 6 — Scroll indicator
-  .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
-
+// Fallback: if video can't play, show title after 1s
+video.addEventListener('error', () => setTimeout(revealTitle, 1000));
+setTimeout(() => { if (!video.ended) revealTitle(); }, 12000);
 
 /* ════════════════════════════════
    Scroll reveal
