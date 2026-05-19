@@ -165,6 +165,19 @@
     position:absolute; top:1.5rem; left:1.5rem; z-index:4;
     font-size:.65rem; letter-spacing:.2em; color: var(--gray);
   }
+  .work-category { margin-bottom: 5rem; }
+  .work-category:last-child { margin-bottom: 0; }
+  .work-category-title {
+    font-family:'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight:700; color: var(--off-white);
+    margin-bottom: 2rem;
+    display:flex; align-items:center; gap:1.5rem;
+  }
+  .work-category-title em { font-style:italic; color: var(--beige); }
+  .work-category-title::after {
+    content:''; flex:1; height:1px; background: var(--light-gray);
+  }
 
   /* ABOUT */
   #about {
@@ -322,53 +335,40 @@
 <!-- WORK -->
 <section id="work">
   <p class="section-label reveal">Obra seleccionada</p>
-  <div class="work-grid">
 
-    <div class="work-item reveal">
-      <span class="work-num"></span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/f_auto,q_auto/Mobiliario_Repeatwellnessclub_Barcelona_nwq5ac" alt="Repeat"/>
-      <div class="work-overlay">
-        <div class="work-info">
-          <h3>Repeat</h3>
-          <span>Wellness Club</span>
-        </div>
-      </div>
+  <!-- OBRES D'ART -->
+  <div class="work-category">
+    <h2 class="work-category-title reveal">Obres d'<em>Art</em></h2>
+    <div class="work-grid">
+      <div class="work-item reveal"><span class="work-num">01</span></div>
+      <div class="work-item reveal"><span class="work-num">02</span></div>
+      <div class="work-item reveal"><span class="work-num">03</span></div>
+      <div class="work-item reveal"><span class="work-num">04</span></div>
     </div>
-
-    <div class="work-item reveal">
-      <span class="work-num"></span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779048941/Lost_limits_-_Anne_Glassner_i_Marit_WoltersPavell%C3%B3_Mies_van_der_Rohe_pepeft.jpg" alt="Lost Limits"/>
-      <div class="work-overlay">
-        <div class="work-info">
-          <h3>Lost Limits</h3>
-          <span>Anne Glassner i Marit Wolters</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="work-item reveal">
-      <span class="work-num"></span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779048941/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_akzszd.jpg" alt="Montaje Gallery"/>
-      <div class="work-overlay">
-        <div class="work-info">
-          <h3>Montaje Gallery</h3>
-          <span>Entrevista con Judeline</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="work-item reveal">
-      <span class="work-num"></span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779048941/Artes_de_la_Tierra_David_Bestu%C3%A9_-_Goggenheim_Bilbao_vefzi6.jpg" alt="Artes de la Tierra"/>
-      <div class="work-overlay">
-        <div class="work-info">
-          <h3>Artes de la Tierra</h3>
-          <span>David Bestué</span>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <!-- OBRES DE DISSENY -->
+  <div class="work-category">
+    <h2 class="work-category-title reveal">Obres de <em>Disseny</em></h2>
+    <div class="work-grid">
+      <div class="work-item reveal"><span class="work-num">01</span></div>
+      <div class="work-item reveal"><span class="work-num">02</span></div>
+      <div class="work-item reveal"><span class="work-num">03</span></div>
+      <div class="work-item reveal"><span class="work-num">04</span></div>
+    </div>
+  </div>
+
+  <!-- OBRES DE PUBLICITAT -->
+  <div class="work-category">
+    <h2 class="work-category-title reveal">Obres de <em>Publicitat</em></h2>
+    <div class="work-grid">
+      <div class="work-item reveal"><span class="work-num">01</span></div>
+      <div class="work-item reveal"><span class="work-num">02</span></div>
+      <div class="work-item reveal"><span class="work-num">03</span></div>
+      <div class="work-item reveal"><span class="work-num">04</span></div>
+    </div>
+  </div>
+
 </section>
 
 <!-- ABOUT -->
