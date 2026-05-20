@@ -154,7 +154,7 @@
 
   <!-- Intro video — transparent WebM, plays once -->
   <video id="intro-video" autoplay muted playsinline>
-    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779214244/skate_transparent3_eh2l2o.webm" type="video/webm"/>
+    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779262923/skate_transparent5_m1qrrj.webm" type="video/webm"/>
   </video>
 
   <div class="hero-art-content">
@@ -263,10 +263,10 @@ tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
   }, '-=0.25')
   .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
 
-// Fade out video when it ends
+// Keep last frame visible when video ends
 const video = document.getElementById('intro-video');
 video.addEventListener('ended', () => {
-  gsap.to('#intro-video', { opacity:0, duration:0.8, ease:'power2.in' });
+  video.pause();
 });
 
 /* ════════════════════════════════
