@@ -57,8 +57,16 @@
   }
 
   /* Canvas particles */
-  /* Canvas va por debajo del vídeo para no interferir */
   #particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
+
+  /* Skateboard parallax wrapper */
+  #skate-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
 
   /* Intro video */
   #intro-video {
@@ -124,9 +132,8 @@
     section { padding:4rem 1.5rem; }
     .work-grid { grid-template-columns:1fr; }
     footer { padding:1.5rem; flex-direction:column; gap:.6rem; text-align:center; }
-    #intro-video { object-position: 50% 30%; }
-    #hero-art { padding-bottom: 1.5rem; }
-    .hero-art-content { margin-top: auto; }
+    #skate-wrap { inset: unset; top: 4.5rem; bottom: 8rem; left: 0; right: 0; }
+    #intro-video { object-position: center center; }
   }
 </style>
 </head>
@@ -268,7 +275,7 @@ tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
 const video = document.getElementById('intro-video');
 const hero  = document.getElementById('hero-art');
 const skateWrap = document.createElement('div');
-Object.assign(skateWrap.style, { position:'absolute', inset:'0', zIndex:'2', pointerEvents:'none', mixBlendMode:'screen' });
+skateWrap.id = 'skate-wrap';
 video.style.zIndex = 'auto';
 video.parentNode.insertBefore(skateWrap, video);
 skateWrap.appendChild(video);
