@@ -263,10 +263,18 @@ tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
   }, '-=0.25')
   .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
 
-// Keep last frame visible when video ends
+// Keep last frame + floating animation when video ends
 const video = document.getElementById('intro-video');
 video.addEventListener('ended', () => {
   video.pause();
+  gsap.to(video, {
+    y: -14,
+    rotation: 1.5,
+    duration: 2.2,
+    ease: 'sine.inOut',
+    yoyo: true,
+    repeat: -1
+  });
 });
 
 /* ════════════════════════════════
