@@ -87,6 +87,7 @@
   .work-item video { width:100%; height:100%; object-fit:cover; display:block; }
   .work-overlay { position:absolute; inset:0; z-index:2; background:linear-gradient(to top,rgba(10,10,10,.85) 0%,transparent 50%); opacity:0; transition:opacity .4s; display:flex; align-items:flex-end; padding:2rem; }
   .work-item:hover .work-overlay { opacity:1; }
+  .work-overlay.touch-visible { opacity:1; }
   .work-info h3 { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--off-white); }
   .work-info span { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--beige); }
   .work-num { position:absolute; top:1.5rem; left:1.5rem; z-index:4; font-size:.65rem; letter-spacing:.2em; color:var(--gray); }
@@ -111,7 +112,7 @@
     nav { padding:1.2rem 1.5rem; }
     .nav-links { gap:1.2rem; }
     .nav-links a { font-size:.65rem; }
-    #hero-art { padding:4rem 1.5rem 3rem; }
+    #hero-art { padding:4rem 1.5rem 7rem; height:70vh; min-height:450px; }
     .page-title { font-size:clamp(2.8rem,12vw,5rem); }
     section { padding:4rem 1.5rem; }
     .work-grid { grid-template-columns:1fr; }
@@ -449,8 +450,12 @@ document.querySelectorAll('.work-item[data-images]').forEach(item => {
 ════════════════════════════════ */
 document.querySelectorAll('.work-item video').forEach(vid => {
   const item = vid.closest('.work-item');
-  item.addEventListener('mouseenter', () => vid.play());
-  item.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+  item._video = {
+    play() { vid.play(); },
+    stop() { vid.pause(); vid.currentTime = 0; }
+  };
+  item.addEventListener('mouseenter', () => item._video.play());
+  item.addEventListener('mouseleave', () => item._video.stop());
 });
 
 /* ════════════════════════════════
@@ -488,14 +493,14 @@ document.querySelectorAll('.work-item[data-images]').forEach(item => {
     );
   }
 
-  item.addEventListener('mouseenter', () => { timer = setInterval(advance, 2000); });
-  item.addEventListener('mouseleave', () => {
-    clearInterval(timer);
-    busy = false;
-    idx = 0;
-    baseImg.src = images[0];
-    gsap.set(nextImg, { opacity: 0 });
-  });
+  function startCycle() { if (!timer) timer = setInterval(advance, 2000); }
+  function stopCycle() {
+    clearInterval(timer); timer = null; busy = false; idx = 0;
+    baseImg.src = images[0]; gsap.set(nextImg, { opacity: 0 });
+  }
+  item._gallery = { start: startCycle, stop: stopCycle };
+  item.addEventListener('mouseenter', startCycle);
+  item.addEventListener('mouseleave', stopCycle);
 });
 
 /* ════════════════════════════════
@@ -515,6 +520,28 @@ dd.querySelector('.nav-dropdown-trigger').addEventListener('click', e => {
 });
 document.addEventListener('click', e => { if (!dd.contains(e.target)) dd.classList.remove('open'); });
 dd.querySelectorAll('.nav-dropdown-menu a').forEach(a => a.addEventListener('click', () => dd.classList.remove('open')));
+
+/* ════════════════════════════════
+   Touch — auto-cycle on viewport entry
+════════════════════════════════ */
+if (window.matchMedia('(hover: none)').matches) {
+  const touchObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const item = e.target;
+      const overlay = item.querySelector('.work-overlay');
+      if (e.isIntersecting) {
+        if (overlay) overlay.classList.add('touch-visible');
+        if (item._gallery) item._gallery.start();
+        if (item._video)   item._video.play();
+      } else {
+        if (overlay) overlay.classList.remove('touch-visible');
+        if (item._gallery) item._gallery.stop();
+        if (item._video)   item._video.stop();
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.work-item').forEach(item => touchObs.observe(item));
+}
 </script>
 </body>
 </html>

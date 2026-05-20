@@ -148,6 +148,7 @@
     display:flex; align-items:flex-end; padding:2rem;
   }
   .work-item:hover .work-overlay { opacity:1; }
+  .work-overlay.touch-visible { opacity:1; }
   .work-info h3 {
     font-family:'Playfair Display', serif;
     font-size:1.4rem; color: var(--off-white);
@@ -290,6 +291,24 @@
     a.addEventListener('click', () => dropdown.classList.remove('open'));
   });
 
+  /* Touch — auto-cycle on viewport entry */
+  if (window.matchMedia('(hover: none)').matches) {
+    const touchObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        const item = e.target;
+        const overlay = item.querySelector('.work-overlay');
+        if (e.isIntersecting) {
+          if (overlay) overlay.classList.add('touch-visible');
+          if (item._gallery) item._gallery.start();
+        } else {
+          if (overlay) overlay.classList.remove('touch-visible');
+          if (item._gallery) item._gallery.stop();
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.work-item').forEach(item => touchObs.observe(item));
+  }
+
   /* Preload gallery images */
   document.querySelectorAll('.work-item[data-images]').forEach(item => {
     JSON.parse(item.getAttribute('data-images')).forEach(url => { new Image().src = url; });
@@ -315,11 +334,14 @@
         onComplete() { baseImg.src = images[idx]; gsap.set(nextImg, { opacity:0 }); busy = false; }
       });
     }
-    item.addEventListener('mouseenter', () => { timer = setInterval(advance, 2000); });
-    item.addEventListener('mouseleave', () => {
-      clearInterval(timer); busy = false; idx = 0;
+    function startCycle() { if (!timer) timer = setInterval(advance, 2000); }
+    function stopCycle() {
+      clearInterval(timer); timer = null; busy = false; idx = 0;
       baseImg.src = images[0]; gsap.set(nextImg, { opacity:0 });
-    });
+    }
+    item._gallery = { start: startCycle, stop: stopCycle };
+    item.addEventListener('mouseenter', startCycle);
+    item.addEventListener('mouseleave', stopCycle);
   });
 </script>
 </body>
