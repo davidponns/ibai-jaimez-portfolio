@@ -161,6 +161,13 @@
     font-size:.65rem; letter-spacing:.2em; color: var(--gray);
   }
 
+  /* CTA */
+  #cta { text-align:center; padding:7rem 3rem; border-top:1px solid var(--light-gray); }
+  .cta-label { font-size:.7rem; letter-spacing:.4em; text-transform:uppercase; color:var(--beige); margin-bottom:1.5rem; display:block; }
+  .cta-title { font-family:'Playfair Display',serif; font-size:clamp(3rem,7vw,7rem); font-weight:900; color:var(--off-white); line-height:1; margin-bottom:2.5rem; }
+  .cta-btn { display:inline-block; padding:.9rem 2.5rem; border:1px solid var(--beige); color:var(--beige); text-decoration:none; font-size:.75rem; letter-spacing:.3em; text-transform:uppercase; transition:background .3s,color .3s; }
+  .cta-btn:hover { background:var(--beige); color:var(--black); }
+
   /* FOOTER */
   footer {
     border-top:1px solid var(--light-gray);
@@ -181,6 +188,7 @@
     #page-header { padding: 8rem 1.5rem 3rem; }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
+    #cta { padding: 4rem 1.5rem; }
     footer { padding: 1.5rem; flex-direction: column; gap: .6rem; text-align: center; }
   }
 </style>
@@ -218,6 +226,13 @@
     <div class="work-item reveal"><span class="work-num">03</span></div>
     <div class="work-item reveal"><span class="work-num">04</span></div>
   </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <span class="cta-label reveal">Tens un projecte en ment?</span>
+  <h2 class="cta-title reveal">Parlem</h2>
+  <a href="index.html#contact" class="cta-btn reveal">Contacte</a>
 </section>
 
 <!-- FOOTER -->
