@@ -263,18 +263,31 @@ tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
   }, '-=0.25')
   .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
 
-// Keep last frame + floating animation when video ends
+// Wrap video in a parallax container so floating and parallax don't conflict
 const video = document.getElementById('intro-video');
+const hero  = document.getElementById('hero-art');
+const skateWrap = document.createElement('div');
+Object.assign(skateWrap.style, { position:'absolute', inset:'0', zIndex:'2', pointerEvents:'none' });
+video.style.zIndex = 'auto';
+video.parentNode.insertBefore(skateWrap, video);
+skateWrap.appendChild(video);
+
+// Mouse parallax on wrapper
+const moveX = gsap.quickTo(skateWrap, 'x', { duration:0.9, ease:'power2.out' });
+const moveY = gsap.quickTo(skateWrap, 'y', { duration:0.9, ease:'power2.out' });
+hero.addEventListener('mousemove', e => {
+  const r  = hero.getBoundingClientRect();
+  const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+  const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+  moveX(dx * 28);
+  moveY(dy * 16);
+});
+hero.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
+
+// Floating on the video element itself (no conflict with parallax)
 video.addEventListener('ended', () => {
   video.pause();
-  gsap.to(video, {
-    y: -14,
-    rotation: 1.5,
-    duration: 2.2,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1
-  });
+  gsap.to(video, { y:-14, rotation:1.5, duration:2.2, ease:'sine.inOut', yoyo:true, repeat:-1 });
 });
 
 /* ════════════════════════════════
