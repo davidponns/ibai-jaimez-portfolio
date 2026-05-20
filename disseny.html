@@ -180,6 +180,15 @@
   .reveal { opacity:0; transform:translateY(30px); transition: opacity .8s ease, transform .8s ease; }
   .reveal.visible { opacity:1; transform:translateY(0); }
 
+  /* Odd last item — center it in the 2-col grid */
+  @media (min-width: 769px) {
+    .work-item:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      max-width: calc(50% - 20px);
+      margin: 0 auto;
+    }
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     nav { padding: 1.2rem 1.5rem; }
@@ -221,10 +230,28 @@
 <!-- WORK -->
 <section id="work">
   <div class="work-grid">
-    <div class="work-item reveal"><span class="work-num">01</span></div>
-    <div class="work-item reveal"><span class="work-num">02</span></div>
-    <div class="work-item reveal"><span class="work-num">03</span></div>
-    <div class="work-item reveal"><span class="work-num">04</span></div>
+
+    <div class="work-item reveal"
+         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_qb5qoi.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_1_caoygi.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297427/Taula_exterior_de_rajoles_4_qwwm8m.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297426/Taula_exterior_de_rajoles_3_f4kws9.jpg"]'>
+      <span class="work-num">01</span>
+      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_qb5qoi.jpg" alt=""/>
+      <div class="work-overlay"><div class="work-info"><h3>Taula exterior de rajoles</h3><span></span></div></div>
+    </div>
+
+    <div class="work-item reveal"
+         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_6_xjtvfz.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_5_xp952h.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Mobiliario_Repeatwellnessclub_Barcelona_1_scbhsj.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Mobiliario_Repeatwellnessclub_Barcelona_3_jqj6ha.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297424/Mobiliario_Repeatwellnessclub_Barcelona_7_fz6m91.jpg"]'>
+      <span class="work-num">02</span>
+      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_6_xjtvfz.jpg" alt=""/>
+      <div class="work-overlay"><div class="work-info"><h3>Repeat Wellness Club</h3><span>Barcelona</span></div></div>
+    </div>
+
+    <div class="work-item reveal"
+         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Escala_a_mida_nftkix.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297766/Escala_a_mida_1_vld5ff.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297766/Escala_a_mida_ix3zwb.jpg"]'>
+      <span class="work-num">03</span>
+      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Escala_a_mida_nftkix.jpg" alt=""/>
+      <div class="work-overlay"><div class="work-info"><h3>Escala a mida</h3><span></span></div></div>
+    </div>
+
   </div>
 </section>
 
@@ -241,12 +268,15 @@
   <span>Art · Disseny · Construcció</span>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
+  /* Scroll reveal */
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  /* Dropdown nav */
   const dropdown = document.querySelector('.nav-dropdown');
   const trigger = dropdown.querySelector('.nav-dropdown-trigger');
   trigger.addEventListener('click', e => {
@@ -258,6 +288,38 @@
   });
   dropdown.querySelectorAll('.nav-dropdown-menu a').forEach(a => {
     a.addEventListener('click', () => dropdown.classList.remove('open'));
+  });
+
+  /* Preload gallery images */
+  document.querySelectorAll('.work-item[data-images]').forEach(item => {
+    JSON.parse(item.getAttribute('data-images')).forEach(url => { new Image().src = url; });
+  });
+
+  /* Gallery cycling on hover */
+  document.querySelectorAll('.work-item[data-images]').forEach(item => {
+    const images = JSON.parse(item.getAttribute('data-images'));
+    if (images.length < 2) return;
+    const baseImg = item.querySelector('img');
+    const nextImg = document.createElement('img');
+    Object.assign(nextImg.style, {
+      position:'absolute', inset:'0', width:'100%', height:'100%',
+      objectFit:'cover', opacity:'0', zIndex:'1', filter:'grayscale(20%)'
+    });
+    item.insertBefore(nextImg, item.querySelector('.work-overlay'));
+    let idx = 0, timer = null, busy = false;
+    function advance() {
+      if (busy) return; busy = true;
+      idx = (idx + 1) % images.length;
+      nextImg.src = images[idx];
+      gsap.fromTo(nextImg, { opacity:0 }, { opacity:1, duration:0.9, ease:'power2.inOut',
+        onComplete() { baseImg.src = images[idx]; gsap.set(nextImg, { opacity:0 }); busy = false; }
+      });
+    }
+    item.addEventListener('mouseenter', () => { timer = setInterval(advance, 2000); });
+    item.addEventListener('mouseleave', () => {
+      clearInterval(timer); busy = false; idx = 0;
+      baseImg.src = images[0]; gsap.set(nextImg, { opacity:0 });
+    });
   });
 </script>
 </body>

@@ -133,12 +133,14 @@
       inset 0 0 0 18px rgba(200,200,200,0.97),
       inset 0 0 0 22px rgba(240,240,240,0.85);
   }
-  .work-item img {
+  .work-item img,
+  .work-item video {
     width:100%; height:100%; object-fit:cover;
     transition: transform .8s cubic-bezier(.25,.46,.45,.94), filter .8s;
     filter: grayscale(20%);
   }
-  .work-item:hover img {
+  .work-item:hover img,
+  .work-item:hover video {
     transform: scale(1.05); filter: grayscale(0%);
   }
   .work-overlay {
@@ -179,6 +181,15 @@
   /* SCROLL REVEAL */
   .reveal { opacity:0; transform:translateY(30px); transition: opacity .8s ease, transform .8s ease; }
   .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* Odd last item — center it in the 2-col grid */
+  @media (min-width: 769px) {
+    .work-item:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      max-width: calc(50% - 20px);
+      margin: 0 auto;
+    }
+  }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
@@ -222,25 +233,26 @@
 <section id="work">
   <div class="work-grid">
 
-    <div class="work-item reveal"
-         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_qb5qoi.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_1_caoygi.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297427/Taula_exterior_de_rajoles_4_qwwm8m.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297426/Taula_exterior_de_rajoles_3_f4kws9.jpg"]'>
+    <div class="work-item reveal" data-video="true">
       <span class="work-num">01</span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Taula_exterior_de_rajoles_qb5qoi.jpg" alt=""/>
-      <div class="work-overlay"><div class="work-info"><h3>Taula exterior de rajoles</h3><span></span></div></div>
+      <video muted loop playsinline>
+        <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779298530/Producci%C3%B3_DENIM_RACING_MILFSHAKE_X_SEAT_jaqs64.mp4" type="video/mp4"/>
+      </video>
+      <div class="work-overlay"><div class="work-info"><h3>Denim Racing</h3><span>Milfshake × SEAT</span></div></div>
     </div>
 
     <div class="work-item reveal"
-         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_6_xjtvfz.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_5_xp952h.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297431/Mobiliario_Repeatwellnessclub_Barcelona_1_scbhsj.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Mobiliario_Repeatwellnessclub_Barcelona_3_jqj6ha.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297424/Mobiliario_Repeatwellnessclub_Barcelona_7_fz6m91.jpg"]'>
+         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779271488/Eclipse_videoclip-La_desped%C3%ADa-_Maestro_Espada_uy51kk.webp","https://res.cloudinary.com/dvm2cwral/image/upload/v1779271487/Eclipse_videoclip-La_desped%C3%ADa-_Maestro_Espada_1_yrcrj6.webp","https://res.cloudinary.com/dvm2cwral/image/upload/v1779271486/Eclipse_videoclip-La_desped%C3%ADa-_Maestro_Espada_2_k7s0be.webp"]'>
       <span class="work-num">02</span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297425/Mobiliario_Repeatwellnessclub_Barcelona_6_xjtvfz.jpg" alt=""/>
-      <div class="work-overlay"><div class="work-info"><h3>Repeat Wellness Club</h3><span>Barcelona</span></div></div>
+      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779271488/Eclipse_videoclip-La_desped%C3%ADa-_Maestro_Espada_uy51kk.webp" alt=""/>
+      <div class="work-overlay"><div class="work-info"><h3>Eclipse</h3><span>La Despedía · Maestro Espada</span></div></div>
     </div>
 
     <div class="work-item reveal"
-         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Escala_a_mida_nftkix.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297766/Escala_a_mida_1_vld5ff.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779297766/Escala_a_mida_ix3zwb.jpg"]'>
+         data-images='["https://res.cloudinary.com/dvm2cwral/image/upload/v1779298526/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_1_zuojhp.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779298765/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_1_c5gqar.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779298526/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_2_zdq0kb.jpg","https://res.cloudinary.com/dvm2cwral/image/upload/v1779298765/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_2_ulq7gk.jpg"]'>
       <span class="work-num">03</span>
-      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779297428/Escala_a_mida_nftkix.jpg" alt=""/>
-      <div class="work-overlay"><div class="work-info"><h3>Escala a mida</h3><span></span></div></div>
+      <img src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779298526/Montaje_Gallery_-_Entrevista_con_Judeline_y_An%C3%A1lisis_de_su_disco_BODHIRIA_1_zuojhp.jpg" alt=""/>
+      <div class="work-overlay"><div class="work-info"><h3>Judeline</h3><span>Bodhiria</span></div></div>
     </div>
 
   </div>
@@ -279,6 +291,13 @@
   });
   dropdown.querySelectorAll('.nav-dropdown-menu a').forEach(a => {
     a.addEventListener('click', () => dropdown.classList.remove('open'));
+  });
+
+  /* Video hover play/pause */
+  document.querySelectorAll('.work-item[data-video]').forEach(item => {
+    const video = item.querySelector('video');
+    item.addEventListener('mouseenter', () => video.play());
+    item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
   });
 
   /* Preload gallery images */
