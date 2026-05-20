@@ -60,17 +60,17 @@
   /* Canvas va por debajo del vídeo para no interferir */
   #particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
 
-  /* Intro video (transparent WebM) */
-  #intro-video {
+  /* Skateboard PNG */
+  #skate-img {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    bottom: 12%;
+    left: 0;
+    width: clamp(280px, 38vw, 560px);
+    height: auto;
     z-index: 2;
     pointer-events: none;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    transform-origin: center center;
+    will-change: transform, opacity;
   }
 
   /* Hero content — hidden until video ends */
@@ -152,10 +152,7 @@
 <section id="hero-art">
   <canvas id="particles"></canvas>
 
-  <!-- Intro video — transparent WebM, plays once -->
-  <video id="intro-video" autoplay muted playsinline>
-    <source src="https://res.cloudinary.com/dvm2cwral/video/upload/v1779214244/skate_transparent3_eh2l2o.webm" type="video/webm"/>
-  </video>
+  <img id="skate-img" src="https://res.cloudinary.com/dvm2cwral/image/upload/v1779262025/skate5_plwxul.png" alt=""/>
 
   <div class="hero-art-content">
     <p class="page-eyebrow">Obra seleccionada &nbsp;·&nbsp; Art</p>
@@ -246,28 +243,78 @@ setInterval(() => { if (Math.random() < 0.5) spawnDust(); }, 100);
   });
 })();
 
-// Set initial states
+// ── SKATEBOARD ANIMATION ──
+const skate = document.getElementById('skate-img');
+const heroW = () => window.innerWidth;
+
+// Burst particles on kickflip
+function burstParticles(x, y) {
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i;
+    const speed = Math.random() * 2.5 + 1;
+    dust.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 1.5,
+      a: 0.55,
+      r: Math.random() * 2.5 + 1
+    });
+  }
+}
+
+// Initial hidden state — off-screen left
+gsap.set(skate, { x: -600, opacity: 1, rotation: 0 });
+
+// Text initial states
 gsap.set('.page-eyebrow', { opacity:0, y:20 });
 gsap.set('.char',         { opacity:0, y:60, rotateX:-80, transformOrigin:'50% 100%' });
 gsap.set('.hero-scroll',  { opacity:0 });
 
-// Text animates simultaneously with video on page load
-const tl = gsap.timeline({ delay:0.3 });
+const master = gsap.timeline({ delay: 0.4 });
 
-tl.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' })
+// 1 — Roll in from left to centre
+master.to(skate, {
+  x: heroW() * 0.28,
+  rotation: -360,
+  duration: 1.2,
+  ease: 'power2.out'
+})
+// 2 — Kickflip (fast rotateY 360 with slight Y arc)
+.to(skate, {
+  rotationY: 360,
+  y: -60,
+  duration: 0.45,
+  ease: 'power1.in',
+  onComplete() {
+    const rect = skate.getBoundingClientRect();
+    burstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  }
+})
+.to(skate, {
+  rotationY: 0,
+  y: 0,
+  duration: 0.35,
+  ease: 'bounce.out'
+})
+// 3 — Roll out to the right
+.to(skate, {
+  x: heroW() + 200,
+  rotation: -720,
+  opacity: 0,
+  duration: 1.0,
+  ease: 'power2.in'
+})
+
+// Text animates from the very start simultaneously
+master.to('.page-eyebrow', { opacity:1, y:0, duration:0.55, ease:'power2.out' }, 0.2)
   .to('.char', {
     opacity:1, y:0, rotateX:0,
     stagger: 0.05,
     duration: 0.55,
     ease: 'back.out(1.5)'
-  }, '-=0.25')
-  .to('.hero-scroll', { opacity:1, duration:0.4 }, '-=0.1');
-
-// Fade out video when it ends
-const video = document.getElementById('intro-video');
-video.addEventListener('ended', () => {
-  gsap.to('#intro-video', { opacity:0, duration:0.8, ease:'power2.in' });
-});
+  }, 0.5)
+  .to('.hero-scroll', { opacity:1, duration:0.4 }, 1.2);
 
 /* ════════════════════════════════
    Scroll reveal
