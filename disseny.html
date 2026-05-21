@@ -101,34 +101,50 @@
     border-bottom: 1px solid var(--light-gray);
   }
 
-  /* 3D Cube */
-  .cube-wrap {
-    --cube-size: 200px;
-    --cube-half: 100px;
+  /* Particles */
+  #hero-particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
+
+  /* Orbit positioning wrapper — no transform so GSAP can freely animate x/y */
+  #orbit-pos {
     position: absolute;
-    right: 18%; top: 50%;
-    transform: translateY(-50%);
-    width: var(--cube-size); height: var(--cube-size);
-    perspective: 700px;
+    right: 8%;
+    top: calc(50% - 180px);
     z-index: 2; pointer-events: none;
   }
-  .cube {
-    width: 100%; height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-  }
+  /* Orbit rotation container — GSAP spins this */
+  #orbit { width: 360px; height: 360px; position: relative; }
+
+  /* Each shape centered in #orbit, then offset to triangle positions */
+  .orbit-item { position: absolute; top: 50%; left: 50%; }
+  .orbit-top { transform: translate(-50%, -50%) translateY(-130px); }
+  .orbit-bl  { transform: translate(-50%, -50%) translate(-113px, 65px); }
+  .orbit-br  { transform: translate(-50%, -50%) translate(113px, 65px); }
+
+  /* Cube */
+  .orbit-cube { width: 80px; height: 80px; perspective: 400px; }
+  .cube { width: 80px; height: 80px; position: relative; transform-style: preserve-3d; }
   .face {
-    position: absolute;
-    width: var(--cube-size); height: var(--cube-size);
+    position: absolute; width: 80px; height: 80px;
     border: 1px solid rgba(200,184,154,0.45);
     background: rgba(42,37,32,0.1);
   }
-  .face.front  { transform: translateZ(var(--cube-half)); }
-  .face.back   { transform: rotateY(180deg) translateZ(var(--cube-half)); }
-  .face.left   { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
-  .face.right  { transform: rotateY(90deg) translateZ(var(--cube-half)); }
-  .face.top    { transform: rotateX(90deg) translateZ(var(--cube-half)); }
-  .face.bottom { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
+  .face.front  { transform: translateZ(40px); }
+  .face.back   { transform: rotateY(180deg) translateZ(40px); }
+  .face.left   { transform: rotateY(-90deg) translateZ(40px); }
+  .face.right  { transform: rotateY(90deg)  translateZ(40px); }
+  .face.top    { transform: rotateX(90deg)  translateZ(40px); }
+  .face.bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+  /* Circle */
+  .shape-circle {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,184,154,0.45);
+    background: rgba(42,37,32,0.1);
+  }
+
+  /* Triangle */
+  .shape-triangle { width: 90px; height: 78px; display: block; }
 
   .hero-design-content { position: relative; z-index: 3; }
 
@@ -245,13 +261,22 @@
     .nav-links { gap: 1.2rem; }
     .nav-links a { font-size: .65rem; }
     #hero-design { padding: 4rem 1.5rem 7rem; height: 70vh; min-height: 450px; }
-    .cube-wrap {
-      --cube-size: 140px;
-      --cube-half: 70px;
-      right: auto; left: 50%;
-      top: 35%;
-      transform: translate(-50%, -50%);
-    }
+    #orbit-pos { right: auto; left: calc(50% - 120px); top: calc(32% - 120px); }
+    #orbit { width: 240px; height: 240px; }
+    .orbit-top { transform: translate(-50%, -50%) translateY(-88px); }
+    .orbit-bl  { transform: translate(-50%, -50%) translate(-76px, 44px); }
+    .orbit-br  { transform: translate(-50%, -50%) translate(76px, 44px); }
+    .orbit-cube { width: 55px; height: 55px; }
+    .cube  { width: 55px; height: 55px; }
+    .face  { width: 55px; height: 55px; }
+    .face.front  { transform: translateZ(28px); }
+    .face.back   { transform: rotateY(180deg) translateZ(28px); }
+    .face.left   { transform: rotateY(-90deg) translateZ(28px); }
+    .face.right  { transform: rotateY(90deg)  translateZ(28px); }
+    .face.top    { transform: rotateX(90deg)  translateZ(28px); }
+    .face.bottom { transform: rotateX(-90deg) translateZ(28px); }
+    .shape-circle   { width: 55px; height: 55px; }
+    .shape-triangle { width: 62px; height: 54px; }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
     #cta { padding: 4rem 1.5rem; }
@@ -280,14 +305,32 @@
 
 <!-- HERO -->
 <section id="hero-design">
-  <div class="cube-wrap">
-    <div class="cube">
-      <div class="face front"></div>
-      <div class="face back"></div>
-      <div class="face left"></div>
-      <div class="face right"></div>
-      <div class="face top"></div>
-      <div class="face bottom"></div>
+  <canvas id="hero-particles"></canvas>
+
+  <div id="orbit-pos">
+    <div id="orbit">
+      <div class="orbit-item orbit-top">
+        <div class="shape-circle"></div>
+      </div>
+      <div class="orbit-item orbit-bl">
+        <div class="orbit-cube">
+          <div class="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+      </div>
+      <div class="orbit-item orbit-br">
+        <svg class="shape-triangle" viewBox="0 0 90 78" fill="none">
+          <polygon points="45,0 90,78 0,78"
+            stroke="rgba(200,184,154,0.45)" stroke-width="1"
+            fill="rgba(42,37,32,0.1)"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -342,25 +385,70 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-  /* Cube animation */
+  /* Shapes + orbit animation */
+  const orbitEl  = document.getElementById('orbit');
+  const orbitPos = document.getElementById('orbit-pos');
   const cube     = document.querySelector('.cube');
-  const cubeWrap = document.querySelector('.cube-wrap');
+  const circle   = document.querySelector('.shape-circle');
+  const triangle = document.querySelector('.shape-triangle');
   const heroEl   = document.getElementById('hero-design');
 
-  gsap.to(cube, { rotationY: 360, duration: 20, ease: 'none', repeat: -1 });
-  gsap.to(cube, { rotationX: 18, duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to(orbitEl,  { rotation: 360, duration: 35, ease: 'none', repeat: -1 });
+  gsap.to(cube,     { rotationY: 360, duration: 12, ease: 'none', repeat: -1 });
+  gsap.to(cube,     { rotationX: 20,  duration: 5,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to(circle,   { rotation: 360,  duration: 22, ease: 'none', repeat: -1 });
+  gsap.to(triangle, { rotation: -360, duration: 18, ease: 'none', repeat: -1 });
 
   if (!window.matchMedia('(hover: none)').matches) {
-    const moveX = gsap.quickTo(cubeWrap, 'x', { duration: 0.9, ease: 'power2.out' });
-    const moveY = gsap.quickTo(cubeWrap, 'y', { duration: 0.9, ease: 'power2.out' });
+    const moveX = gsap.quickTo(orbitPos, 'x', { duration: 1.1, ease: 'power2.out' });
+    const moveY = gsap.quickTo(orbitPos, 'y', { duration: 1.1, ease: 'power2.out' });
     heroEl.addEventListener('mousemove', e => {
       const r  = heroEl.getBoundingClientRect();
       const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
       const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-      moveX(dx * 35); moveY(dy * 20);
+      moveX(dx * 30); moveY(dy * 18);
     });
     heroEl.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
   }
+
+  /* Particles */
+  const pCanvas = document.getElementById('hero-particles');
+  const pCtx    = pCanvas.getContext('2d');
+  const parts   = [];
+
+  function resizeCanvas() {
+    pCanvas.width  = heroEl.offsetWidth;
+    pCanvas.height = heroEl.offsetHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function spawnP() {
+    parts.push({
+      x:  Math.random() * pCanvas.width,
+      y:  pCanvas.height + 4,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: -(Math.random() * 0.28 + 0.08),
+      a:  Math.random() * 0.18 + 0.04,
+      r:  Math.random() * 1.3 + 0.3
+    });
+  }
+  setInterval(() => { if (Math.random() < 0.45) spawnP(); }, 100);
+
+  (function animP() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -10) { parts.splice(i, 1); continue; }
+      pCtx.save();
+      pCtx.globalAlpha = p.a;
+      pCtx.fillStyle = '#c8b89a';
+      pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2); pCtx.fill();
+      pCtx.restore();
+    }
+    requestAnimationFrame(animP);
+  })();
 
   /* Scroll reveal */
   const observer = new IntersectionObserver(entries => {
