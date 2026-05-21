@@ -123,8 +123,8 @@
     transform: rotateX(76deg);
     transform-origin: 50% 100%;
     background-image:
-      linear-gradient(rgba(200,184,154,0.13) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,184,154,0.10) 1px, transparent 1px);
+      linear-gradient(rgba(200,184,154,0.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,184,154,0.16) 1px, transparent 1px);
     background-size: 90px 90px;
     animation: gridScroll 4s linear infinite;
   }
@@ -148,6 +148,31 @@
     background: radial-gradient(ellipse 80% 100% at 50% 100%, transparent 45%, var(--black) 85%);
     z-index: 2; pointer-events: none;
   }
+
+  /* Hero floating shapes */
+  #hero-cube-wrap {
+    position: absolute;
+    right: 19%; top: 16%;
+    z-index: 2; pointer-events: none;
+  }
+  #hero-ico-wrap {
+    position: absolute;
+    right: 7%; top: 42%;
+    z-index: 2; pointer-events: none;
+  }
+  .h-cube-persp { width: 95px; height: 95px; perspective: 500px; }
+  .h-cube { width: 95px; height: 95px; position: relative; transform-style: preserve-3d; }
+  .h-face {
+    position: absolute; width: 95px; height: 95px;
+    border: 1px solid rgba(200,184,154,0.42);
+    background: rgba(42,37,32,0.08);
+  }
+  .h-face.front  { transform: translateZ(48px); }
+  .h-face.back   { transform: rotateY(180deg) translateZ(48px); }
+  .h-face.left   { transform: rotateY(-90deg) translateZ(48px); }
+  .h-face.right  { transform: rotateY(90deg)  translateZ(48px); }
+  .h-face.top    { transform: rotateX(90deg)  translateZ(48px); }
+  .h-face.bottom { transform: rotateX(-90deg) translateZ(48px); }
 
   .hero-design-content { position: relative; z-index: 3; }
 
@@ -266,6 +291,17 @@
     #hero-design { padding: 4rem 1.5rem 7rem; height: 70vh; min-height: 450px; }
     #persp-wrap { height: 55%; perspective: 300px; }
     #persp-grid { left: -80%; right: -80%; }
+    #hero-cube-wrap { right: auto; left: 8%; top: 14%; }
+    #hero-ico-wrap  { right: 6%; top: 14%; }
+    .h-cube-persp { width: 62px; height: 62px; }
+    .h-cube       { width: 62px; height: 62px; }
+    .h-face       { width: 62px; height: 62px; }
+    .h-face.front  { transform: translateZ(31px); }
+    .h-face.back   { transform: rotateY(180deg) translateZ(31px); }
+    .h-face.left   { transform: rotateY(-90deg) translateZ(31px); }
+    .h-face.right  { transform: rotateY(90deg)  translateZ(31px); }
+    .h-face.top    { transform: rotateX(90deg)  translateZ(31px); }
+    .h-face.bottom { transform: rotateX(-90deg) translateZ(31px); }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
     #cta { padding: 4rem 1.5rem; }
@@ -298,6 +334,23 @@
 
   <div id="persp-wrap">
     <div id="persp-grid"></div>
+  </div>
+
+  <div id="hero-cube-wrap">
+    <div class="h-cube-persp">
+      <div class="h-cube">
+        <div class="h-face front"></div>
+        <div class="h-face back"></div>
+        <div class="h-face left"></div>
+        <div class="h-face right"></div>
+        <div class="h-face top"></div>
+        <div class="h-face bottom"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-ico-wrap">
+    <canvas id="ico-canvas" width="110" height="110"></canvas>
   </div>
 
   <div class="hero-design-content">
@@ -351,7 +404,94 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-  const heroEl = document.getElementById('hero-design');
+  const heroEl   = document.getElementById('hero-design');
+  const cubeWrap = document.getElementById('hero-cube-wrap');
+  const icoWrap  = document.getElementById('hero-ico-wrap');
+  const hCube    = document.querySelector('.h-cube');
+
+  /* Cube spin */
+  gsap.to(hCube, { rotationY: 360, duration: 14, ease: 'none', repeat: -1 });
+  gsap.to(hCube, { rotationX: 18,  duration: 6,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
+  /* Parallax on mousemove — cube moves less (far), icosahedron more (close) */
+  if (!window.matchMedia('(hover: none)').matches) {
+    const moveCX = gsap.quickTo(cubeWrap, 'x', { duration: 1.2, ease: 'power2.out' });
+    const moveCY = gsap.quickTo(cubeWrap, 'y', { duration: 1.2, ease: 'power2.out' });
+    const moveIX = gsap.quickTo(icoWrap,  'x', { duration: 0.9, ease: 'power2.out' });
+    const moveIY = gsap.quickTo(icoWrap,  'y', { duration: 0.9, ease: 'power2.out' });
+    heroEl.addEventListener('mousemove', e => {
+      const r  = heroEl.getBoundingClientRect();
+      const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+      const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+      moveCX(dx * 16); moveCY(dy * 10);
+      moveIX(dx * 30); moveIY(dy * 20);
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      moveCX(0); moveCY(0); moveIX(0); moveIY(0);
+    });
+  }
+
+  /* Icosahedron — canvas wireframe renderer */
+  (function () {
+    const canvas = document.getElementById('ico-canvas');
+    const ctx    = canvas.getContext('2d');
+    const S      = canvas.width;
+    const C      = S / 2;
+    const phi    = (1 + Math.sqrt(5)) / 2;
+
+    const verts = [
+      [0,1,phi],[0,-1,phi],[0,1,-phi],[0,-1,-phi],
+      [1,phi,0],[-1,phi,0],[1,-phi,0],[-1,-phi,0],
+      [phi,0,1],[phi,0,-1],[-phi,0,1],[-phi,0,-1]
+    ];
+    const edges = [
+      [0,1],[0,4],[0,5],[0,8],[0,10],
+      [1,6],[1,7],[1,8],[1,10],
+      [2,3],[2,4],[2,5],[2,9],[2,11],
+      [3,6],[3,7],[3,9],[3,11],
+      [4,5],[4,8],[4,9],
+      [5,10],[5,11],
+      [6,7],[6,8],[6,9],
+      [7,10],[7,11],
+      [8,9],[10,11]
+    ];
+
+    const cR    = Math.sqrt(1 + phi * phi);
+    const scale = (C * 0.82) / cR;
+    let rotY = 0, rotX = 0.35;
+
+    function ry(v, a) {
+      const c = Math.cos(a), s = Math.sin(a);
+      return [c*v[0]+s*v[2], v[1], -s*v[0]+c*v[2]];
+    }
+    function rx(v, a) {
+      const c = Math.cos(a), s = Math.sin(a);
+      return [v[0], c*v[1]-s*v[2], s*v[1]+c*v[2]];
+    }
+    function proj(v) {
+      const fov = 4.5, z = v[2]/cR + fov;
+      return [C + v[0]*scale*fov/z, C + v[1]*scale*fov/z];
+    }
+
+    (function draw() {
+      ctx.clearRect(0, 0, S, S);
+      const t = verts.map(v => rx(ry(v, rotY), rotX));
+      const p = t.map(proj);
+      edges.forEach(([a, b]) => {
+        const z     = (t[a][2] + t[b][2]) / 2 / cR;
+        const alpha = 0.18 + (z + 1) * 0.18;
+        ctx.beginPath();
+        ctx.moveTo(p[a][0], p[a][1]);
+        ctx.lineTo(p[b][0], p[b][1]);
+        ctx.strokeStyle = `rgba(200,184,154,${alpha.toFixed(2)})`;
+        ctx.lineWidth   = 0.85;
+        ctx.stroke();
+      });
+      rotY += 0.007;
+      rotX += 0.003;
+      requestAnimationFrame(draw);
+    })();
+  })();
 
   /* Particles */
   const pCanvas = document.getElementById('hero-particles');
