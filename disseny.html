@@ -411,8 +411,8 @@
   const hCube    = document.querySelector('.h-cube');
 
   /* Cube spin */
-  gsap.to(hCube, { rotationY: 360, duration: 70, ease: 'none', repeat: -1 });
-  gsap.to(hCube, { rotationX: 14,  duration: 28, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to(hCube, { rotationY: 360, duration: 40, ease: 'none', repeat: -1 });
+  gsap.to(hCube, { rotationX: 14,  duration: 18, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
   /* Parallax on mousemove — cube moves less (far), icosahedron more (close) */
   if (!window.matchMedia('(hover: none)').matches) {
