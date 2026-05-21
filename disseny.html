@@ -108,43 +108,38 @@
   #orbit-pos {
     position: absolute;
     right: 8%;
-    top: calc(50% - 180px);
+    top: calc(50% - 200px);
     z-index: 2; pointer-events: none;
   }
   /* Orbit rotation container — GSAP spins this */
-  #orbit { width: 360px; height: 360px; position: relative; }
+  #orbit { width: 400px; height: 400px; position: relative; }
 
   /* Each shape centered in #orbit, then offset to triangle positions */
   .orbit-item { position: absolute; top: 50%; left: 50%; }
-  .orbit-top { transform: translate(-50%, -50%) translateY(-130px); }
-  .orbit-bl  { transform: translate(-50%, -50%) translate(-113px, 65px); }
-  .orbit-br  { transform: translate(-50%, -50%) translate(113px, 65px); }
+  .orbit-top { transform: translate(-50%, -50%) translateY(-165px); }
+  .orbit-bl  { transform: translate(-50%, -50%) translate(-143px, 83px); }
+  .orbit-br  { transform: translate(-50%, -50%) translate(143px, 83px); }
 
   /* Cube */
-  .orbit-cube { width: 80px; height: 80px; perspective: 400px; }
-  .cube { width: 80px; height: 80px; position: relative; transform-style: preserve-3d; }
+  .orbit-cube { width: 120px; height: 120px; perspective: 600px; }
+  .cube { width: 120px; height: 120px; position: relative; transform-style: preserve-3d; }
   .face {
-    position: absolute; width: 80px; height: 80px;
+    position: absolute; width: 120px; height: 120px;
     border: 1px solid rgba(200,184,154,0.45);
     background: rgba(42,37,32,0.1);
   }
-  .face.front  { transform: translateZ(40px); }
-  .face.back   { transform: rotateY(180deg) translateZ(40px); }
-  .face.left   { transform: rotateY(-90deg) translateZ(40px); }
-  .face.right  { transform: rotateY(90deg)  translateZ(40px); }
-  .face.top    { transform: rotateX(90deg)  translateZ(40px); }
-  .face.bottom { transform: rotateX(-90deg) translateZ(40px); }
+  .face.front  { transform: translateZ(60px); }
+  .face.back   { transform: rotateY(180deg) translateZ(60px); }
+  .face.left   { transform: rotateY(-90deg) translateZ(60px); }
+  .face.right  { transform: rotateY(90deg)  translateZ(60px); }
+  .face.top    { transform: rotateX(90deg)  translateZ(60px); }
+  .face.bottom { transform: rotateX(-90deg) translateZ(60px); }
 
-  /* Circle */
-  .shape-circle {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    border: 1px solid rgba(200,184,154,0.45);
-    background: rgba(42,37,32,0.1);
-  }
+  /* Sphere */
+  .shape-sphere { width: 120px; height: 120px; display: block; }
 
-  /* Triangle */
-  .shape-triangle { width: 90px; height: 78px; display: block; }
+  /* Pyramid */
+  .shape-pyramid { width: 120px; height: 120px; display: block; }
 
   .hero-design-content { position: relative; z-index: 3; }
 
@@ -261,22 +256,22 @@
     .nav-links { gap: 1.2rem; }
     .nav-links a { font-size: .65rem; }
     #hero-design { padding: 4rem 1.5rem 7rem; height: 70vh; min-height: 450px; }
-    #orbit-pos { right: auto; left: calc(50% - 120px); top: calc(32% - 120px); }
-    #orbit { width: 240px; height: 240px; }
-    .orbit-top { transform: translate(-50%, -50%) translateY(-88px); }
-    .orbit-bl  { transform: translate(-50%, -50%) translate(-76px, 44px); }
-    .orbit-br  { transform: translate(-50%, -50%) translate(76px, 44px); }
-    .orbit-cube { width: 55px; height: 55px; }
-    .cube  { width: 55px; height: 55px; }
-    .face  { width: 55px; height: 55px; }
-    .face.front  { transform: translateZ(28px); }
-    .face.back   { transform: rotateY(180deg) translateZ(28px); }
-    .face.left   { transform: rotateY(-90deg) translateZ(28px); }
-    .face.right  { transform: rotateY(90deg)  translateZ(28px); }
-    .face.top    { transform: rotateX(90deg)  translateZ(28px); }
-    .face.bottom { transform: rotateX(-90deg) translateZ(28px); }
-    .shape-circle   { width: 55px; height: 55px; }
-    .shape-triangle { width: 62px; height: 54px; }
+    #orbit-pos { right: auto; left: calc(50% - 133px); top: calc(32% - 133px); }
+    #orbit { width: 267px; height: 267px; }
+    .orbit-top { transform: translate(-50%, -50%) translateY(-110px); }
+    .orbit-bl  { transform: translate(-50%, -50%) translate(-95px, 55px); }
+    .orbit-br  { transform: translate(-50%, -50%) translate(95px, 55px); }
+    .orbit-cube { width: 80px; height: 80px; }
+    .cube  { width: 80px; height: 80px; }
+    .face  { width: 80px; height: 80px; }
+    .face.front  { transform: translateZ(40px); }
+    .face.back   { transform: rotateY(180deg) translateZ(40px); }
+    .face.left   { transform: rotateY(-90deg) translateZ(40px); }
+    .face.right  { transform: rotateY(90deg)  translateZ(40px); }
+    .face.top    { transform: rotateX(90deg)  translateZ(40px); }
+    .face.bottom { transform: rotateX(-90deg) translateZ(40px); }
+    .shape-sphere   { width: 80px; height: 80px; }
+    .shape-pyramid  { width: 80px; height: 80px; }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
     #cta { padding: 4rem 1.5rem; }
@@ -310,7 +305,11 @@
   <div id="orbit-pos">
     <div id="orbit">
       <div class="orbit-item orbit-top">
-        <div class="shape-circle"></div>
+        <svg class="shape-sphere" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="58" stroke="rgba(200,184,154,0.45)" stroke-width="1" fill="rgba(42,37,32,0.1)"/>
+          <ellipse cx="60" cy="60" rx="58" ry="18" stroke="rgba(200,184,154,0.3)" stroke-width="1"/>
+          <ellipse cx="60" cy="60" rx="18" ry="58" stroke="rgba(200,184,154,0.3)" stroke-width="1"/>
+        </svg>
       </div>
       <div class="orbit-item orbit-bl">
         <div class="orbit-cube">
@@ -325,10 +324,22 @@
         </div>
       </div>
       <div class="orbit-item orbit-br">
-        <svg class="shape-triangle" viewBox="0 0 90 78" fill="none">
-          <polygon points="45,0 90,78 0,78"
-            stroke="rgba(200,184,154,0.45)" stroke-width="1"
-            fill="rgba(42,37,32,0.1)"/>
+        <svg class="shape-pyramid" viewBox="0 0 120 120" fill="none">
+          <!-- Back face -->
+          <polygon points="60,5 28,72 92,72"
+            stroke="rgba(200,184,154,0.2)" stroke-width="1" fill="rgba(42,37,32,0.05)"/>
+          <!-- Left face -->
+          <polygon points="60,5 10,108 28,72"
+            stroke="rgba(200,184,154,0.35)" stroke-width="1" fill="rgba(42,37,32,0.12)"/>
+          <!-- Right face -->
+          <polygon points="60,5 110,108 92,72"
+            stroke="rgba(200,184,154,0.35)" stroke-width="1" fill="rgba(42,37,32,0.12)"/>
+          <!-- Front face -->
+          <polygon points="60,5 10,108 110,108"
+            stroke="rgba(200,184,154,0.45)" stroke-width="1" fill="rgba(42,37,32,0.08)"/>
+          <!-- Base -->
+          <polygon points="10,108 110,108 92,72 28,72"
+            stroke="rgba(200,184,154,0.25)" stroke-width="1" fill="none"/>
         </svg>
       </div>
     </div>
@@ -389,15 +400,15 @@
   const orbitEl  = document.getElementById('orbit');
   const orbitPos = document.getElementById('orbit-pos');
   const cube     = document.querySelector('.cube');
-  const circle   = document.querySelector('.shape-circle');
-  const triangle = document.querySelector('.shape-triangle');
+  const sphere   = document.querySelector('.shape-sphere');
+  const pyramid  = document.querySelector('.shape-pyramid');
   const heroEl   = document.getElementById('hero-design');
 
   gsap.to(orbitEl,  { rotation: 360, duration: 35, ease: 'none', repeat: -1 });
   gsap.to(cube,     { rotationY: 360, duration: 12, ease: 'none', repeat: -1 });
   gsap.to(cube,     { rotationX: 20,  duration: 5,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to(circle,   { rotation: 360,  duration: 22, ease: 'none', repeat: -1 });
-  gsap.to(triangle, { rotation: -360, duration: 18, ease: 'none', repeat: -1 });
+  gsap.to(sphere,   { rotation: 360,  duration: 22, ease: 'none', repeat: -1 });
+  gsap.to(pyramid,  { rotation: -360, duration: 18, ease: 'none', repeat: -1 });
 
   if (!window.matchMedia('(hover: none)').matches) {
     const moveX = gsap.quickTo(orbitPos, 'x', { duration: 1.1, ease: 'power2.out' });
