@@ -152,27 +152,27 @@
   /* Hero floating shapes */
   #hero-cube-wrap {
     position: absolute;
-    right: 19%; top: 16%;
+    left: 48%; top: 11%;
     z-index: 2; pointer-events: none;
   }
   #hero-ico-wrap {
     position: absolute;
-    right: 7%; top: 42%;
+    left: 57%; top: 40%;
     z-index: 2; pointer-events: none;
   }
-  .h-cube-persp { width: 95px; height: 95px; perspective: 500px; }
-  .h-cube { width: 95px; height: 95px; position: relative; transform-style: preserve-3d; }
+  .h-cube-persp { width: 160px; height: 160px; perspective: 800px; }
+  .h-cube { width: 160px; height: 160px; position: relative; transform-style: preserve-3d; }
   .h-face {
-    position: absolute; width: 95px; height: 95px;
+    position: absolute; width: 160px; height: 160px;
     border: 1px solid rgba(200,184,154,0.42);
     background: rgba(42,37,32,0.08);
   }
-  .h-face.front  { transform: translateZ(48px); }
-  .h-face.back   { transform: rotateY(180deg) translateZ(48px); }
-  .h-face.left   { transform: rotateY(-90deg) translateZ(48px); }
-  .h-face.right  { transform: rotateY(90deg)  translateZ(48px); }
-  .h-face.top    { transform: rotateX(90deg)  translateZ(48px); }
-  .h-face.bottom { transform: rotateX(-90deg) translateZ(48px); }
+  .h-face.front  { transform: translateZ(80px); }
+  .h-face.back   { transform: rotateY(180deg) translateZ(80px); }
+  .h-face.left   { transform: rotateY(-90deg) translateZ(80px); }
+  .h-face.right  { transform: rotateY(90deg)  translateZ(80px); }
+  .h-face.top    { transform: rotateX(90deg)  translateZ(80px); }
+  .h-face.bottom { transform: rotateX(-90deg) translateZ(80px); }
 
   .hero-design-content { position: relative; z-index: 3; }
 
@@ -291,17 +291,17 @@
     #hero-design { padding: 4rem 1.5rem 7rem; height: 70vh; min-height: 450px; }
     #persp-wrap { height: 55%; perspective: 300px; }
     #persp-grid { left: -80%; right: -80%; }
-    #hero-cube-wrap { right: auto; left: 8%; top: 14%; }
-    #hero-ico-wrap  { right: 6%; top: 14%; }
-    .h-cube-persp { width: 62px; height: 62px; }
-    .h-cube       { width: 62px; height: 62px; }
-    .h-face       { width: 62px; height: 62px; }
-    .h-face.front  { transform: translateZ(31px); }
-    .h-face.back   { transform: rotateY(180deg) translateZ(31px); }
-    .h-face.left   { transform: rotateY(-90deg) translateZ(31px); }
-    .h-face.right  { transform: rotateY(90deg)  translateZ(31px); }
-    .h-face.top    { transform: rotateX(90deg)  translateZ(31px); }
-    .h-face.bottom { transform: rotateX(-90deg) translateZ(31px); }
+    #hero-cube-wrap { left: 5%; top: 10%; }
+    #hero-ico-wrap  { right: 4%; top: 10%; left: auto; }
+    .h-cube-persp { width: 95px; height: 95px; }
+    .h-cube       { width: 95px; height: 95px; }
+    .h-face       { width: 95px; height: 95px; }
+    .h-face.front  { transform: translateZ(48px); }
+    .h-face.back   { transform: rotateY(180deg) translateZ(48px); }
+    .h-face.left   { transform: rotateY(-90deg) translateZ(48px); }
+    .h-face.right  { transform: rotateY(90deg)  translateZ(48px); }
+    .h-face.top    { transform: rotateX(90deg)  translateZ(48px); }
+    .h-face.bottom { transform: rotateX(-90deg) translateZ(48px); }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
     #cta { padding: 4rem 1.5rem; }
@@ -350,7 +350,7 @@
   </div>
 
   <div id="hero-ico-wrap">
-    <canvas id="ico-canvas" width="110" height="110"></canvas>
+    <canvas id="ico-canvas" width="180" height="180"></canvas>
   </div>
 
   <div class="hero-design-content">
@@ -410,8 +410,8 @@
   const hCube    = document.querySelector('.h-cube');
 
   /* Cube spin */
-  gsap.to(hCube, { rotationY: 360, duration: 14, ease: 'none', repeat: -1 });
-  gsap.to(hCube, { rotationX: 18,  duration: 6,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to(hCube, { rotationY: 360, duration: 30, ease: 'none', repeat: -1 });
+  gsap.to(hCube, { rotationX: 18,  duration: 14, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
   /* Parallax on mousemove — cube moves less (far), icosahedron more (close) */
   if (!window.matchMedia('(hover: none)').matches) {
@@ -487,8 +487,8 @@
         ctx.lineWidth   = 0.85;
         ctx.stroke();
       });
-      rotY += 0.007;
-      rotX += 0.003;
+      rotY += 0.003;
+      rotX += 0.0012;
       requestAnimationFrame(draw);
     })();
   })();
