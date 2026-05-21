@@ -102,44 +102,52 @@
   }
 
   /* Particles */
-  #hero-particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
+  #hero-particles { position:absolute; inset:0; pointer-events:none; z-index:2; }
 
-  /* Orbit positioning wrapper — no transform so GSAP can freely animate x/y */
-  #orbit-pos {
+  /* Perspective grid plane */
+  #persp-wrap {
     position: absolute;
-    right: 8%;
-    top: calc(50% - 200px);
+    bottom: 0; left: 0; right: 0;
+    height: 62%;
+    perspective: 480px;
+    perspective-origin: 50% 0%;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+  #persp-grid {
+    position: absolute;
+    bottom: 0;
+    left: -60%; right: -60%;
+    height: 200%;
+    transform: rotateX(76deg);
+    transform-origin: 50% 100%;
+    background-image:
+      linear-gradient(rgba(200,184,154,0.13) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,184,154,0.10) 1px, transparent 1px);
+    background-size: 90px 90px;
+    animation: gridScroll 4s linear infinite;
+  }
+  @keyframes gridScroll {
+    from { background-position: center 0; }
+    to   { background-position: center 90px; }
+  }
+  /* Fade the horizon edge */
+  #persp-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 55%;
+    background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
     z-index: 2; pointer-events: none;
   }
-  /* Orbit rotation container — GSAP spins this */
-  #orbit { width: 400px; height: 400px; position: relative; }
-
-  /* Each shape centered in #orbit, then offset to triangle positions */
-  .orbit-item { position: absolute; top: 50%; left: 50%; }
-  .orbit-top { transform: translate(-50%, -50%) translateY(-165px); }
-  .orbit-bl  { transform: translate(-50%, -50%) translate(-143px, 83px); }
-  .orbit-br  { transform: translate(-50%, -50%) translate(143px, 83px); }
-
-  /* Cube */
-  .orbit-cube { width: 120px; height: 120px; perspective: 600px; }
-  .cube { width: 120px; height: 120px; position: relative; transform-style: preserve-3d; }
-  .face {
-    position: absolute; width: 120px; height: 120px;
-    border: 1px solid rgba(200,184,154,0.45);
-    background: rgba(42,37,32,0.1);
+  /* Vignette sides */
+  #persp-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 100% at 50% 100%, transparent 45%, var(--black) 85%);
+    z-index: 2; pointer-events: none;
   }
-  .face.front  { transform: translateZ(60px); }
-  .face.back   { transform: rotateY(180deg) translateZ(60px); }
-  .face.left   { transform: rotateY(-90deg) translateZ(60px); }
-  .face.right  { transform: rotateY(90deg)  translateZ(60px); }
-  .face.top    { transform: rotateX(90deg)  translateZ(60px); }
-  .face.bottom { transform: rotateX(-90deg) translateZ(60px); }
-
-  /* Sphere */
-  .shape-sphere { width: 120px; height: 120px; display: block; }
-
-  /* Pyramid */
-  .shape-pyramid { width: 120px; height: 120px; display: block; }
 
   .hero-design-content { position: relative; z-index: 3; }
 
@@ -256,22 +264,8 @@
     .nav-links { gap: 1.2rem; }
     .nav-links a { font-size: .65rem; }
     #hero-design { padding: 4rem 1.5rem 7rem; height: 70vh; min-height: 450px; }
-    #orbit-pos { right: auto; left: calc(50% - 133px); top: calc(32% - 133px); }
-    #orbit { width: 267px; height: 267px; }
-    .orbit-top { transform: translate(-50%, -50%) translateY(-110px); }
-    .orbit-bl  { transform: translate(-50%, -50%) translate(-95px, 55px); }
-    .orbit-br  { transform: translate(-50%, -50%) translate(95px, 55px); }
-    .orbit-cube { width: 80px; height: 80px; }
-    .cube  { width: 80px; height: 80px; }
-    .face  { width: 80px; height: 80px; }
-    .face.front  { transform: translateZ(40px); }
-    .face.back   { transform: rotateY(180deg) translateZ(40px); }
-    .face.left   { transform: rotateY(-90deg) translateZ(40px); }
-    .face.right  { transform: rotateY(90deg)  translateZ(40px); }
-    .face.top    { transform: rotateX(90deg)  translateZ(40px); }
-    .face.bottom { transform: rotateX(-90deg) translateZ(40px); }
-    .shape-sphere   { width: 80px; height: 80px; }
-    .shape-pyramid  { width: 80px; height: 80px; }
+    #persp-wrap { height: 55%; perspective: 300px; }
+    #persp-grid { left: -80%; right: -80%; }
     section { padding: 4rem 1.5rem; }
     .work-grid { grid-template-columns: 1fr; }
     #cta { padding: 4rem 1.5rem; }
@@ -302,47 +296,8 @@
 <section id="hero-design">
   <canvas id="hero-particles"></canvas>
 
-  <div id="orbit-pos">
-    <div id="orbit">
-      <div class="orbit-item orbit-top">
-        <svg class="shape-sphere" viewBox="0 0 120 120" fill="none">
-          <circle cx="60" cy="60" r="58" stroke="rgba(200,184,154,0.45)" stroke-width="1" fill="rgba(42,37,32,0.1)"/>
-          <ellipse cx="60" cy="60" rx="58" ry="18" stroke="rgba(200,184,154,0.3)" stroke-width="1"/>
-          <ellipse cx="60" cy="60" rx="18" ry="58" stroke="rgba(200,184,154,0.3)" stroke-width="1"/>
-        </svg>
-      </div>
-      <div class="orbit-item orbit-bl">
-        <div class="orbit-cube">
-          <div class="cube">
-            <div class="face front"></div>
-            <div class="face back"></div>
-            <div class="face left"></div>
-            <div class="face right"></div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-          </div>
-        </div>
-      </div>
-      <div class="orbit-item orbit-br">
-        <svg class="shape-pyramid" viewBox="0 0 120 120" fill="none">
-          <!-- Back face -->
-          <polygon points="60,5 28,72 92,72"
-            stroke="rgba(200,184,154,0.2)" stroke-width="1" fill="rgba(42,37,32,0.05)"/>
-          <!-- Left face -->
-          <polygon points="60,5 10,108 28,72"
-            stroke="rgba(200,184,154,0.35)" stroke-width="1" fill="rgba(42,37,32,0.12)"/>
-          <!-- Right face -->
-          <polygon points="60,5 110,108 92,72"
-            stroke="rgba(200,184,154,0.35)" stroke-width="1" fill="rgba(42,37,32,0.12)"/>
-          <!-- Front face -->
-          <polygon points="60,5 10,108 110,108"
-            stroke="rgba(200,184,154,0.45)" stroke-width="1" fill="rgba(42,37,32,0.08)"/>
-          <!-- Base -->
-          <polygon points="10,108 110,108 92,72 28,72"
-            stroke="rgba(200,184,154,0.25)" stroke-width="1" fill="none"/>
-        </svg>
-      </div>
-    </div>
+  <div id="persp-wrap">
+    <div id="persp-grid"></div>
   </div>
 
   <div class="hero-design-content">
@@ -396,31 +351,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-  /* Shapes + orbit animation */
-  const orbitEl  = document.getElementById('orbit');
-  const orbitPos = document.getElementById('orbit-pos');
-  const cube     = document.querySelector('.cube');
-  const sphere   = document.querySelector('.shape-sphere');
-  const pyramid  = document.querySelector('.shape-pyramid');
-  const heroEl   = document.getElementById('hero-design');
-
-  gsap.to(orbitEl,  { rotation: 360, duration: 35, ease: 'none', repeat: -1 });
-  gsap.to(cube,     { rotationY: 360, duration: 12, ease: 'none', repeat: -1 });
-  gsap.to(cube,     { rotationX: 20,  duration: 5,  ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to(sphere,   { rotation: 360,  duration: 22, ease: 'none', repeat: -1 });
-  gsap.to(pyramid,  { rotation: -360, duration: 18, ease: 'none', repeat: -1 });
-
-  if (!window.matchMedia('(hover: none)').matches) {
-    const moveX = gsap.quickTo(orbitPos, 'x', { duration: 1.1, ease: 'power2.out' });
-    const moveY = gsap.quickTo(orbitPos, 'y', { duration: 1.1, ease: 'power2.out' });
-    heroEl.addEventListener('mousemove', e => {
-      const r  = heroEl.getBoundingClientRect();
-      const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-      const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-      moveX(dx * 30); moveY(dy * 18);
-    });
-    heroEl.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
-  }
+  const heroEl = document.getElementById('hero-design');
 
   /* Particles */
   const pCanvas = document.getElementById('hero-particles');
